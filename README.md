@@ -1,2 +1,3 @@
-# rock_scissors_paper_python
+# Rock Scissors Paper Game
+
 Game Rock Scissors Papers made in Python. 
