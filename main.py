@@ -1,5 +1,5 @@
-from board import GameBoard
-from messages import INVALID_NUMBER_FORMAT, SELECT_NUMBER_VICTORIES
+from game.board import GameBoard
+from game.messages import INVALID_NUMBER_FORMAT, SELECT_NUMBER_VICTORIES
 
 
 def run() -> None:
