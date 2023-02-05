@@ -1,16 +1,12 @@
-import random
-
-from messages import (
-    COMPUTER_WON_GAME,
-    COMPUTER_WON_ROUND,
+from game.player import Player
+from game.messages import (
     INVALID_NUMBER_VICTORIES,
     INVALID_OPTION,
     NOBODY_WINS,
-    SELECT_OPTION,
-    USER_WON_GAME,
-    USER_WON_ROUND
+    PLAYER_WON_GAME,
+    PLAYER_WON_ROUND
 )
-from variables import COMPUTER, PAPEL, PIEDRA, SALIR, TIJERA, USER
+from game.variables import PAPEL, PIEDRA, SALIR, TIJERA
 
 
 class GameBoard:
@@ -18,10 +14,14 @@ class GameBoard:
     Class to manage the Board of the game Rock-Scissors-Paper
     """
 
-    number_victories: int
-    options: tuple = (PIEDRA, PAPEL, TIJERA, SALIR)
+    PLAYER_1: Player
+    PLAYER_2: Player
+    NUMBER_VICTORIES: int
+    OPTIONS: tuple = (PIEDRA, PAPEL, TIJERA, SALIR)
 
-    def __init__(self, number_victories: int) -> None:
+    def __init__(
+        self, number_victories: int, player_1: str, player_2: str
+    ) -> None:
         """
         Function to initialize the number of the victories in the Board.
 
@@ -31,82 +31,71 @@ class GameBoard:
         if number_victories <= 0:
             raise ValueError(INVALID_NUMBER_VICTORIES)
 
-        self.number_victories = number_victories
+        self.PLAYER_1 = Player(player_1)
+        self.PLAYER_2 = Player(player_2)
+        self.NUMBER_VICTORIES = number_victories
 
     def run(self) -> None:
 
-        victories_user = 0
-        victories_computer = 0
+        victories_player_1 = 0
+        victories_player_2 = 0
 
         while (
-            victories_user < self.number_victories
-            and victories_computer < self.number_victories
+            victories_player_1 < self.NUMBER_VICTORIES
+            and victories_player_2 < self.NUMBER_VICTORIES
         ):
 
-            user_option = input(SELECT_OPTION)
-            user_option = user_option.lower()
-            if user_option not in self.options:
-                print(INVALID_OPTION)
-                continue
-            if user_option == SALIR:
+            option_1 = self.PLAYER_1.select_option()
+            option_2 = self.PLAYER_2.select_option()
+            if option_1 == SALIR or option_2 == SALIR:
                 break
+            winner = self.determine_result(option_1, option_2)
+            if winner == 1:
+                victories_player_1 += 1
+                print(PLAYER_WON_ROUND.format(str(winner)))
+            elif winner == 2:
+                victories_player_2 += 1
+                print(PLAYER_WON_ROUND.format(str(winner)))
 
-            computer_option = random.choice(self.options[0:3])
+            self.print_result(victories_player_1, victories_player_2)
 
-            winner = self.determine_result(user_option, computer_option)
-            if winner == USER:
-                victories_user += 1
-                print(USER_WON_ROUND)
-            elif winner == COMPUTER:
-                victories_computer += 1
-                print(COMPUTER_WON_ROUND)
-
-            self.print_result(victories_user, victories_computer)
-
-        if victories_user > victories_computer:
-            print(USER_WON_GAME)
-        elif victories_computer > victories_user:
-            print(COMPUTER_WON_GAME)
+        if victories_player_1 > victories_player_2:
+            print(PLAYER_WON_GAME.format("1"))
+        elif victories_player_2 > victories_player_1:
+            print(PLAYER_WON_GAME.format("2"))
         else:
             print(NOBODY_WINS)
 
-    def determine_result(self, user_option: str, computer_option: str) -> str:
+    def determine_result(self, option_1: str, option_2: str) -> int:
         """
         Function to determine who wins with the given options
 
         Args:
-            option_user (str): Option selected by the user
-            option_computer (str): Option selected by the computer
+            option_1 (str): Option selected by the player 1
+            option_2 (str): Option selected by the player 2
 
         Returns:
-            str: Winner or draw (In case the options are the same)
+            int: 1 in case Player 1 wins, 2 in case Player 2 wins
+                 or 0 in case nobody wins
         """
-        if user_option == computer_option:
-            return "draw"
 
         if (
-            user_option not in self.options or
-            computer_option not in self.options
+            option_1 not in self.OPTIONS
+            or option_2 not in self.OPTIONS
         ):
             raise ValueError(INVALID_OPTION)
 
-        if user_option == PIEDRA:
-            if computer_option == TIJERA:
-                return USER
-            else:
-                return COMPUTER
+        if option_1 == option_2:
+            return 0
 
-        elif user_option == PAPEL:
-            if computer_option == PIEDRA:
-                return USER
-            else:
-                return COMPUTER
-
+        if option_1 == PIEDRA and option_2 == TIJERA:
+            return 1
+        elif option_1 == PAPEL and option_2 == PIEDRA:
+            return 1
+        elif option_1 == TIJERA and option_2 == PAPEL:
+            return 1
         else:
-            if computer_option == PAPEL:
-                return USER
-            else:
-                return COMPUTER
+            return 2
 
     def print_result(
         self, victories_user: int, victories_computer: int
