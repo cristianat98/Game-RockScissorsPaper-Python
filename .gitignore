@@ -130,3 +130,6 @@ dmypy.json
 
 # VS Code Debugger
 .vscode/
+
+# Other files
+todo.txt
