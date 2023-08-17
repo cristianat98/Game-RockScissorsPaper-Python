@@ -56,6 +56,8 @@ class GameBoard:
             elif winner == 2:
                 victories_player_2 += 1
                 print(PLAYER_WON_ROUND.format(str(winner)))
+            else:
+                print("There was a draw")
 
             self.print_result(victories_player_1, victories_player_2)
 
