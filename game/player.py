@@ -2,7 +2,7 @@ import logging
 import random
 
 from game.messages import INVALID_OPTION, INVALID_PLAYER, SELECT_OPTION
-from game.variables import COMPUTER, PAPEL, PIEDRA, SALIR, TIJERA, USER
+from game.constants import COMPUTER, OPTIONS_AVAILABLE, USER
 
 logger = logging.getLogger(__name__)
 
@@ -10,7 +10,7 @@ logger = logging.getLogger(__name__)
 class Player:
     TYPE: str
     NAME: str
-    OPTIONS: tuple = (PIEDRA, PAPEL, TIJERA, SALIR)
+    OPTIONS: tuple = OPTIONS_AVAILABLE
 
     def __init__(self, type: str, name: str = None) -> None:
         """Constructor of the Class
@@ -26,6 +26,8 @@ class Player:
 
         if type == COMPUTER:
             self.NAME = COMPUTER
+        else:
+            self.NAME = name if name else "Player 1"
 
         self.TYPE = type
 

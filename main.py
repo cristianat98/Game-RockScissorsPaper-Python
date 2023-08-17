@@ -6,7 +6,7 @@ from game.messages import (
     SELECT_NUMBER_PLAYERS,
     SELECT_NUMBER_VICTORIES
 )
-from game.variables import COMPUTER, USER
+from game.constants import COMPUTER, USER
 
 
 logger = logging.getLogger(__name__)

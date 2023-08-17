@@ -1,9 +1,12 @@
 """
 INPUT MESSAGES
 """
+from game.constants import EXIT, PAPER, ROCK, SCISSOR
+
+
 SELECT_NUMBER_VICTORIES = "Select the number of the needed victories: "
 SELECT_NUMBER_PLAYERS = "Select the number of the players (1 or 2): "
-SELECT_OPTION = "Select your option (piedra, papel, tijera, salir): "
+SELECT_OPTION = f"Select your option ({ROCK}, {PAPER}, {SCISSOR}, {EXIT}): "
 
 """
 SINGLE MESSAGES

@@ -6,7 +6,7 @@ from game.messages import (
     PLAYER_WON_GAME,
     PLAYER_WON_ROUND
 )
-from game.variables import PAPEL, PIEDRA, SALIR, TIJERA
+from game.constants import OPTIONS_AVAILABLE, ROCK, SCISSOR, PAPER, EXIT
 
 
 class GameBoard:
@@ -17,7 +17,7 @@ class GameBoard:
     PLAYER_1: Player
     PLAYER_2: Player
     NUMBER_VICTORIES: int
-    OPTIONS: tuple = (PIEDRA, PAPEL, TIJERA, SALIR)
+    OPTIONS: tuple = OPTIONS_AVAILABLE
 
     def __init__(
         self, number_victories: int, player_1: str, player_2: str
@@ -31,7 +31,7 @@ class GameBoard:
         if number_victories <= 0:
             raise ValueError(INVALID_NUMBER_VICTORIES)
 
-        self.PLAYER_1 = Player(player_1)
+        self.PLAYER_1 = Player(player_1, "Player 1")
         self.PLAYER_2 = Player(player_2)
         self.NUMBER_VICTORIES = number_victories
 
@@ -47,7 +47,7 @@ class GameBoard:
 
             option_1 = self.PLAYER_1.select_option()
             option_2 = self.PLAYER_2.select_option()
-            if option_1 == SALIR or option_2 == SALIR:
+            if option_1 == EXIT or option_2 == EXIT:
                 break
             winner = self.determine_result(option_1, option_2)
             if winner == 1:
@@ -88,11 +88,11 @@ class GameBoard:
         if option_1 == option_2:
             return 0
 
-        if option_1 == PIEDRA and option_2 == TIJERA:
+        if option_1 == ROCK and option_2 == SCISSOR:
             return 1
-        elif option_1 == PAPEL and option_2 == PIEDRA:
+        elif option_1 == PAPER and option_2 == ROCK:
             return 1
-        elif option_1 == TIJERA and option_2 == PAPEL:
+        elif option_1 == SCISSOR and option_2 == PAPER:
             return 1
         else:
             return 2
